@@ -4,6 +4,11 @@ import com.salesianostriana.dam.trianafy.model.Artist;
 import com.salesianostriana.dam.trianafy.repos.ArtistRepository;
 import com.salesianostriana.dam.trianafy.service.ArtistService;
 import com.salesianostriana.dam.trianafy.service.SongService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +24,13 @@ public class ArtistController {
     private final SongService songService;
     private final ArtistRepository artistRepo;
 
+    @Operation(summary = "Obtener el listado de artistas")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Listado de artistas encontrado",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Artist.class))}),
+            @ApiResponse(responseCode = "404", description = "No existen artistas",
+                    content = @Content)})
     @GetMapping("/artist/")
     public ResponseEntity<List<Artist>> listarArtistas() {
         if (artistService.findAll().isEmpty()) {
@@ -28,11 +40,25 @@ public class ArtistController {
         }
     }
 
+    @Operation(summary = "Obtener artista por su ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Artista encontrado",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Artist.class))}),
+            @ApiResponse(responseCode = "404", description = "Artista no encontrado",
+                    content = @Content)})
     @GetMapping("/artist/{id}")
     public ResponseEntity<Artist> mostrarArtista(@PathVariable Long id) {
         return ResponseEntity.of(artistService.findById(id));
     }
 
+    @Operation(summary = "Crear nuevo artista")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Artista creado",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Artist.class))}),
+            @ApiResponse(responseCode = "400", description = "Cuerpo para la creación aportado inválido",
+                    content = @Content)})
     @PostMapping("/artist/")
     public ResponseEntity<Artist> crearArtista(@RequestBody Artist a) {
         if (a.getName() == null) {
@@ -42,6 +68,13 @@ public class ArtistController {
         }
     }
 
+    @Operation(summary = "Modificar un artista, buscado por su ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Artista modificado correctamente",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Artist.class))}),
+            @ApiResponse(responseCode = "404", description = "No se encuentra el artista",
+                    content = @Content)})
     @PutMapping("/artist/{id}")
     public ResponseEntity<Artist> actualizarArtista(@PathVariable Long id, @RequestBody Artist a) {
         if (a.getName() == null) {
@@ -57,15 +90,17 @@ public class ArtistController {
         }
     }
 
+    @Operation(summary = "Eliminar un artista, buscado por su ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Artista eliminado correctamente, sin contenido",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Artist.class))}),
+            @ApiResponse(responseCode = "404", description = "No se encuentra el artista",
+                    content = @Content)})
     @DeleteMapping("/artist/{id}")
     public ResponseEntity<Artist> borrarArtista(@PathVariable Long id) {
         if (artistRepo.existsById(id)) {
-            String nombreArtista = artistService.findById(id).get().getName();
-            songService.findAll().forEach(song -> {
-                if (song.getArtist().getName() == nombreArtista) {
-                    song.setArtist(null);
-                }
-            });
+            songService.setearArtistaBorrado(artistService.findById(id).get());
             artistService.deleteById(id);
         }
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
