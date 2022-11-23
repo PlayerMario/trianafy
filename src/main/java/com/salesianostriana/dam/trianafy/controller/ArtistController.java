@@ -94,9 +94,7 @@ public class ArtistController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Artista eliminado correctamente, sin contenido",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Artist.class))}),
-            @ApiResponse(responseCode = "404", description = "No se encuentra el artista",
-                    content = @Content)})
+                            schema = @Schema(implementation = Artist.class))})})
     @DeleteMapping("/artist/{id}")
     public ResponseEntity<Artist> borrarArtista(@PathVariable Long id) {
         if (artistRepo.existsById(id)) {
