@@ -26,5 +26,10 @@ public class Song {
     @ManyToOne(fetch = FetchType.EAGER)
     private Artist artist;
 
+    public Song(String title, String album, String year) {
+        this.title = title;
+        this.album = album;
+        this.year = year;
+    }
 
 }

@@ -2,6 +2,7 @@ package com.salesianostriana.dam.trianafy.service;
 
 
 import com.salesianostriana.dam.trianafy.model.Artist;
+import com.salesianostriana.dam.trianafy.model.Song;
 import com.salesianostriana.dam.trianafy.repos.ArtistRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,10 @@ public class ArtistService {
 
     public void deleteById(Long id) {
         repository.deleteById(id);
+    }
+
+    public void setearArtistaCancion(Long id, Song song) {
+        song.setArtist(findById(id).orElse(null));
     }
 
 }
