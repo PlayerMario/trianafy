@@ -40,4 +40,11 @@ public class SongService {
         repository.deleteById(id);
     }
 
+    public void setearArtistaBorrado(Artist a) {
+        findAll().forEach(song -> {
+            if (song.getArtist().getName() == a.getName()) {
+                song.setArtist(null);
+            }
+        });
+    }
 }
