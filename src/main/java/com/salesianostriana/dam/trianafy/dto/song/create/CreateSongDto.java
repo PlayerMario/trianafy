@@ -1,4 +1,4 @@
-package com.salesianostriana.dam.trianafy.dto.song;
+package com.salesianostriana.dam.trianafy.dto.song.create;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

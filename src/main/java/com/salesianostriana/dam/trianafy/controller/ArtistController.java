@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "Artista", description = "Controlador para gestionar los artistas.")
 public class ArtistController {
 
     private final ArtistService artistService;
@@ -28,18 +30,23 @@ public class ArtistController {
 
     @Operation(summary = "Obtener el listado de artistas")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Listado de artistas encontrado",
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Listado de artistas encontrado",
                     content = {@Content(mediaType = "application/json",
                             array = @ArraySchema(schema = @Schema(implementation = Artist.class)),
-                    examples = {@ExampleObject(
-                            value = """
-                                    [
-                                        {"id": 1, "nombre": "Wu-Tang Clan"},
-                                        {"id": 2, "nombre": "NWA"}
-                                    ]
-                                    """
-                    )})}),
-            @ApiResponse(responseCode = "404", description = "No existen artistas",
+                            examples = {@ExampleObject(
+                                    value = """
+                                            [
+                                                {"id": 1, "nombre": "Joaquín Sabina"},
+                                                {"id": 2, "nombre": "Dua Lipa"}
+                                            ]
+                                            """
+                            )}
+                    )}),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "No existen artistas",
                     content = @Content)})
     @GetMapping("/artist/")
     public ResponseEntity<List<Artist>> listarArtistas() {
@@ -52,9 +59,17 @@ public class ArtistController {
 
     @Operation(summary = "Obtener artista por su ID")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Artista encontrado",
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Artista encontrado",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Artist.class))}),
+                            schema = @Schema(implementation = Artist.class),
+                            examples = {@ExampleObject(
+                                    value = """
+                                                {"id": 1, "nombre": "Joaquín Sabina"}
+                                            """
+                            )}
+                    )}),
             @ApiResponse(responseCode = "404", description = "Artista no encontrado",
                     content = @Content)})
     @GetMapping("/artist/{id}")
@@ -66,7 +81,13 @@ public class ArtistController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Artista creado",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Artist.class))}),
+                            schema = @Schema(implementation = Artist.class),
+                            examples = {@ExampleObject(
+                                    value = """
+                                                {"id": 13, "nombre": "Wu-Tang Clan"}
+                                            """
+                            )}
+                    )}),
             @ApiResponse(responseCode = "400", description = "Cuerpo para la creación aportado inválido",
                     content = @Content)})
     @PostMapping("/artist/")
@@ -82,9 +103,18 @@ public class ArtistController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Artista modificado correctamente",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Artist.class))}),
+                            schema = @Schema(implementation = Artist.class),
+                            examples = {@ExampleObject(
+                                    value = """
+                                                {"id": 13, "nombre": "Westside Connection"}
+                                            """
+                            )}
+                    )}),
+            @ApiResponse(responseCode = "400", description = "Cuerpo para la modificación aportado inválido",
+                    content = @Content),
             @ApiResponse(responseCode = "404", description = "No se encuentra el artista",
-                    content = @Content)})
+                    content = @Content)
+    })
     @PutMapping("/artist/{id}")
     public ResponseEntity<Artist> actualizarArtista(@PathVariable Long id, @RequestBody Artist a) {
         if (a.getName() == null) {
@@ -93,7 +123,8 @@ public class ArtistController {
             return ResponseEntity.of(
                     artistService.findById(id).map(art -> {
                         art.setName(a.getName());
-                        artistService.add(art);
+                        artistService.edit(art);
+
                         return art;
                     })
             );
@@ -104,7 +135,13 @@ public class ArtistController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Artista eliminado correctamente, sin contenido",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Artist.class))})})
+                            schema = @Schema(implementation = Artist.class),
+                            examples = {@ExampleObject(
+                                    value = """
+                                                {}
+                                            """
+                            )}
+                    )})})
     @DeleteMapping("/artist/{id}")
     public ResponseEntity<Artist> borrarArtista(@PathVariable Long id) {
         if (artistRepo.existsById(id)) {
