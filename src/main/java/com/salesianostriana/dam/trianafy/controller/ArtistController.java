@@ -5,7 +5,9 @@ import com.salesianostriana.dam.trianafy.repos.ArtistRepository;
 import com.salesianostriana.dam.trianafy.service.ArtistService;
 import com.salesianostriana.dam.trianafy.service.SongService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -28,7 +30,15 @@ public class ArtistController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Listado de artistas encontrado",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Artist.class))}),
+                            array = @ArraySchema(schema = @Schema(implementation = Artist.class)),
+                    examples = {@ExampleObject(
+                            value = """
+                                    [
+                                        {"id": 1, "nombre": "Wu-Tang Clan"},
+                                        {"id": 2, "nombre": "NWA"}
+                                    ]
+                                    """
+                    )})}),
             @ApiResponse(responseCode = "404", description = "No existen artistas",
                     content = @Content)})
     @GetMapping("/artist/")
