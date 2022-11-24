@@ -28,6 +28,14 @@ public class Playlist {
     @Builder.Default
     private List<Song> songs = new ArrayList<>();
 
+    public Playlist(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
+    public Playlist(String name) {
+        this.name = name;
+    }
 
     public void addSong(Song song) {
         songs.add(song);
@@ -36,6 +44,5 @@ public class Playlist {
     public void deleteSong(Song song) {
         songs.remove(song);
     }
-
 
 }

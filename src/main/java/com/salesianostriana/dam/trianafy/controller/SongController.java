@@ -107,13 +107,13 @@ public class SongController {
     public ResponseEntity<GetSongDto> crearCancion(@RequestBody CreateSongDto createSongDto) {
         if (createSongDto.getArtistId() == null || createSongDto.getYear() == null || createSongDto.getTitle() == null || createSongDto.getAlbum() == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        } else {
+            Song nuevaCancion = dtoConverter.createSongDtoToSong(createSongDto);
+            artistService.setearArtistaCancion(createSongDto.getArtistId(), nuevaCancion);
+            songService.add(nuevaCancion);
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(getSongDto.songToDto(nuevaCancion));
         }
-
-        Song nuevaCancion = dtoConverter.createSongDtoToSong(createSongDto);
-        artistService.setearArtistaCancion(createSongDto.getArtistId(), nuevaCancion);
-        songService.add(nuevaCancion);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(getSongDto.songToDto(nuevaCancion));
     }
 
     @Operation(summary = "Modificar una canción, buscada por su ID")
