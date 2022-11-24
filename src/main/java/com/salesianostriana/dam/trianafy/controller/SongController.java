@@ -1,6 +1,7 @@
 package com.salesianostriana.dam.trianafy.controller;
 
 import com.salesianostriana.dam.trianafy.dto.song.CreateSongDto;
+import com.salesianostriana.dam.trianafy.dto.song.GetSongDto;
 import com.salesianostriana.dam.trianafy.dto.song.SongDtoConverter;
 import com.salesianostriana.dam.trianafy.model.Artist;
 import com.salesianostriana.dam.trianafy.model.Song;
@@ -22,6 +23,7 @@ public class SongController {
     private final SongService songService;
     private final SongRepository songRepository;
     private final SongDtoConverter dtoConverter;
+    private final GetSongDto songDto;
     private final ArtistService artistService;
 
     @GetMapping("/song/")
@@ -46,8 +48,10 @@ public class SongController {
 
         Song nuevaCancion = dtoConverter.createSongDtoToSong(createSongDto);
         artistService.setearArtistaCancion(createSongDto.getArtistId(), nuevaCancion);
-
         return ResponseEntity.status(HttpStatus.CREATED).body(songService.add(nuevaCancion));
+
+        //GetSongDto dtoSong = data.new(GetMonumentoDto::of)
+        //return ResponseEntity.status(HttpStatus.CREATED).body(GetSongDto::of(nuevaCancion));
     }
 
     @PutMapping("/song/{id}")
