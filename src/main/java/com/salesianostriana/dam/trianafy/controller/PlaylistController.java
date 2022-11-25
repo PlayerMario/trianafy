@@ -254,7 +254,7 @@ public class PlaylistController {
     @Operation(summary = "Añadir una canción a una playlist")
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "200",
+                    responseCode = "201",
                     description = "Canción añadida con éxito a la playlist",
                     content = {@Content(mediaType = "application/json",
                             array = @ArraySchema(schema = @Schema(implementation = Playlist.class)),
@@ -282,7 +282,8 @@ public class PlaylistController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         } else {
             playlistService.findById(idList).get().getSongs().add(songService.findById(idSong).get());
-            return listarCancionesPlaylist(idList);
+            //return listarCancionesPlaylist(idList);
+            return ResponseEntity.status(HttpStatus.CREATED).body(getOnePlaylistDtoConverter.onePlaylistToDto(playlistService.findById(idList).get()));
         }
     }
 
