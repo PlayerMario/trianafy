@@ -81,7 +81,7 @@ public class SongController {
                             schema = @Schema(implementation = Song.class),
                             examples = {@ExampleObject(
                                     value = """
-                                                {"id": 9, "title": "Enter Sandman", "artist": {"id": "3", "nombre": "Metallica"}, "album": "Metallica", "year": "1991"}
+                                                {"id": 9, "title": "Enter Sandman", "artist": {"id": "3", "name": "Metallica"}, "album": "Metallica", "year": "1991"}
                                             """
                             )}
                     )}),
