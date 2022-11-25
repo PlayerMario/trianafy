@@ -5,6 +5,7 @@ import com.salesianostriana.dam.trianafy.dto.song.get.GetSongDto;
 import com.salesianostriana.dam.trianafy.dto.song.create.CreateSongDtoConverter;
 import com.salesianostriana.dam.trianafy.dto.song.get.GetSongDtoConverter;
 import com.salesianostriana.dam.trianafy.model.Song;
+import com.salesianostriana.dam.trianafy.repos.ArtistRepository;
 import com.salesianostriana.dam.trianafy.repos.SongRepository;
 import com.salesianostriana.dam.trianafy.service.ArtistService;
 import com.salesianostriana.dam.trianafy.service.PlaylistService;
@@ -35,6 +36,7 @@ public class SongController {
     private final CreateSongDtoConverter dtoConverter;
     private final GetSongDtoConverter getSongDto;
     private final ArtistService artistService;
+    private final ArtistRepository artistRepository;
     private final PlaylistService playlistService;
 
     @Operation(summary = "Obtener el listado de canciones")
@@ -107,7 +109,7 @@ public class SongController {
                     content = @Content)})
     @PostMapping("/song/")
     public ResponseEntity<GetSongDto> crearCancion(@RequestBody CreateSongDto createSongDto) {
-        if (createSongDto.getArtistId() == null || createSongDto.getYear() == null || createSongDto.getTitle() == null || createSongDto.getAlbum() == null) {
+        if (!artistRepository.existsById(createSongDto.getArtistId()) || createSongDto.getYear() == "" || createSongDto.getTitle() == "" || createSongDto.getAlbum() == "") {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         } else {
             Song nuevaCancion = dtoConverter.createSongDtoToSong(createSongDto);
@@ -136,7 +138,7 @@ public class SongController {
     })
     @PutMapping("/song/{id}")
     public ResponseEntity<GetSongDto> actualizarCancion(@PathVariable Long id, @RequestBody CreateSongDto createSongDto) {
-        if (createSongDto.getArtistId() == null || createSongDto.getYear() == null || createSongDto.getTitle() == null || createSongDto.getAlbum() == null) {
+        if (!artistRepository.existsById(createSongDto.getArtistId()) || createSongDto.getYear() == "" || createSongDto.getTitle() == "" || createSongDto.getAlbum() == "") {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         } else {
             Song cancionEditada = dtoConverter.createSongDtoToSong(createSongDto);

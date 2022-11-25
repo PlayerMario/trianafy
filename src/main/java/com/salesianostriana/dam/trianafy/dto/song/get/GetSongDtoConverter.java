@@ -8,11 +8,18 @@ import org.springframework.stereotype.Component;
 public class GetSongDtoConverter {
 
     public GetSongDto songToDto(Song s) {
+        String artistName = "";
+        if(s.getArtist() == null) {
+            artistName = "Indefinido";
+        } else{
+            artistName = s.getArtist().getName();
+        }
+
         return GetSongDto
                 .builder()
                 .id(s.getId())
                 .title(s.getTitle())
-                .artist(s.getArtist().getName())
+                .artist(artistName)
                 .album(s.getAlbum())
                 .year(s.getYear())
                 .build();
