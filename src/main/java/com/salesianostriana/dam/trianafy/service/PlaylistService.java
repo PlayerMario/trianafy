@@ -43,7 +43,7 @@ public class PlaylistService {
     public void borrarCancionListas(Song s) {
         List<Playlist> listaPlaylist = findAll();
         for (Playlist p : listaPlaylist) {
-            while (p.getSongs().contains(s)){
+            while (p.getSongs().contains(s)) {
                 p.getSongs().remove(s);
             }
         }

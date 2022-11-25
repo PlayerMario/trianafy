@@ -92,7 +92,7 @@ public class ArtistController {
                     content = @Content)})
     @PostMapping("/artist/")
     public ResponseEntity<Artist> crearArtista(@RequestBody Artist a) {
-        if (a.getName() == null) {
+        if (a.getName() == "") {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         } else {
             return ResponseEntity.status(HttpStatus.CREATED).body(artistService.add(a));
@@ -117,7 +117,7 @@ public class ArtistController {
     })
     @PutMapping("/artist/{id}")
     public ResponseEntity<Artist> actualizarArtista(@PathVariable Long id, @RequestBody Artist a) {
-        if (a.getName() == null) {
+        if (a.getName() == "") {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         } else {
             return ResponseEntity.of(

@@ -9,9 +9,9 @@ public class GetSongDtoConverter {
 
     public GetSongDto songToDto(Song s) {
         String artistName = "";
-        if(s.getArtist() == null) {
-            artistName = "Indefinido";
-        } else{
+        if (s.getArtist() == null) {
+            artistName = "Desconocido";
+        } else {
             artistName = s.getArtist().getName();
         }
 

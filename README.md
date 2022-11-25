@@ -18,7 +18,7 @@ y accesible desde la dirección **http://localhost:8080/** como ruta raíz.
 Para poder probar la API, tendremos dos vías principales:
 - **Documentación del proyecto en Swagger**: Accederemos a través de la ruta **http://localhost:8080/swagger-trianafy-docs.html**. Aquí, podremos probar todos los endpoints
 disponibles en la API, y ver ejemplos de retorno.
-- **Aplicación de Postman:**: Dentro del proyecto, se encuentra el archivo **Trianafy.postman_collection.json**. Este archivo, podremos importarlo en las colecciones de Postman,
+- **Aplicación de Postman**: Dentro del proyecto, se encuentra el archivo **Trianafy.postman_collection.json**. Este archivo, podremos importarlo en las colecciones de Postman,
 en el que hay preparadas una serie de peticiones a todos los posibles métodos de la API. En las peticiones POST y PUT, cuando la seleccionemos, al pulsar en **Body**, podremos
 indicar el cuerpo que se envía en la petición para crear o modificar algún recurso.
 

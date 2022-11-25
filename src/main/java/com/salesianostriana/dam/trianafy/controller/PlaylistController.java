@@ -52,7 +52,7 @@ public class PlaylistController {
                     responseCode = "200",
                     description = "Playlists encontrada",
                     content = {@Content(mediaType = "application/json",
-                            array = @ArraySchema(schema = @Schema(implementation = Playlist.class)),
+                            array = @ArraySchema(schema = @Schema(implementation = GetPlaylistDto.class)),
                             examples = {@ExampleObject(
                                     value = """
                                             [
@@ -86,7 +86,7 @@ public class PlaylistController {
                     responseCode = "200",
                     description = "Playlists encontrada",
                     content = {@Content(mediaType = "application/json",
-                            array = @ArraySchema(schema = @Schema(implementation = Playlist.class)),
+                            schema = @Schema(implementation = GetOnePlaylistDto.class),
                             examples = {@ExampleObject(
                                     value = """
                                             {"id": 12, "name": "Random", "description": "Una lista muy loca",
@@ -117,7 +117,7 @@ public class PlaylistController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Playlist creada",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Playlist.class),
+                            schema = @Schema(implementation = CreatePlaylistDto.class),
                             examples = {@ExampleObject(
                                     value = """
                                             {"id": 15, "name": "Música de los 90", "description": "Listado de canciones de rap de los 90"}
@@ -143,7 +143,7 @@ public class PlaylistController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Playlist modificada correctamente",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Playlist.class),
+                            schema = @Schema(implementation = GetPlaylistDto.class),
                             examples = {@ExampleObject(
                                     value = """
                                                 {"id": 15, "name": "Rap90", "numberOfSongs": "0"}
@@ -192,13 +192,13 @@ public class PlaylistController {
 
 
     // GESTIÓN DE CANCIONES DE UNA PLAYLIST
-    @Operation(summary = "Obtener el listado de canciones de una playlist")
+    @Operation(summary = "Obtener el listado de canciones de una playlist, buscada por su ID")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
                     description = "Listado de canciones de una playlist encontrado",
                     content = {@Content(mediaType = "application/json",
-                            array = @ArraySchema(schema = @Schema(implementation = Playlist.class)),
+                            schema = @Schema(implementation = GetOnePlaylistDto.class),
                             examples = {@ExampleObject(
                                     value = """
                                             {"id": 12, "name": "Random", "description": "Una lista muy loca",
@@ -229,7 +229,7 @@ public class PlaylistController {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "Canción y listado encontrados",
+                    description = "Canción y playlist encontrados",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = Song.class),
                             examples = {@ExampleObject(
@@ -238,7 +238,7 @@ public class PlaylistController {
                                             """
                             )}
                     )}),
-            @ApiResponse(responseCode = "404", description = "Canción o listado no encontrados",
+            @ApiResponse(responseCode = "404", description = "Canción o playlist no encontrados",
                     content = @Content)})
     @GetMapping("/list/{id1}/song/{id2}")
     public ResponseEntity<Song> mostrarCancion(@PathVariable("id1") Long idList, @PathVariable("id2") Long idSong) {
@@ -258,7 +258,7 @@ public class PlaylistController {
                     responseCode = "201",
                     description = "Canción añadida con éxito a la playlist",
                     content = {@Content(mediaType = "application/json",
-                            array = @ArraySchema(schema = @Schema(implementation = Playlist.class)),
+                            schema = @Schema(implementation = GetOnePlaylistDto.class),
                             examples = {@ExampleObject(
                                     value = """
                                             {"id": 12, "name": "Random", "description": "Una lista muy loca",
@@ -284,7 +284,6 @@ public class PlaylistController {
         } else {
             playlistService.findById(idList).get().getSongs().add(songService.findById(idSong).get());
             playlistService.edit(playlistService.findById(idList).get());
-            //return listarCancionesPlaylist(idList);
             return ResponseEntity.status(HttpStatus.CREATED).body(getOnePlaylistDtoConverter.onePlaylistToDto(playlistService.findById(idList).get()));
         }
     }
@@ -293,7 +292,7 @@ public class PlaylistController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Canción eliminada correctamente, sin contenido",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Song.class),
+                            schema = @Schema(implementation = Playlist.class),
                             examples = {@ExampleObject(
                                     value = """
                                                 {}

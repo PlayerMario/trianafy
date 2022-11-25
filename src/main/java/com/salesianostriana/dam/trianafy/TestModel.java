@@ -119,13 +119,5 @@ public class TestModel {
 
         System.out.println(p1);
 
-
-
-
-
-
-
-
     }
-
 }

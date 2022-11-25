@@ -45,7 +45,7 @@ public class SongController {
                     responseCode = "200",
                     description = "Listado de canciones encontrado",
                     content = {@Content(mediaType = "application/json",
-                            array = @ArraySchema(schema = @Schema(implementation = Song.class)),
+                            array = @ArraySchema(schema = @Schema(implementation = GetSongDto.class)),
                             examples = {@ExampleObject(
                                     value = """
                                             [
@@ -87,7 +87,7 @@ public class SongController {
                                             """
                             )}
                     )}),
-            @ApiResponse(responseCode = "404", description = "Canción no encontrado",
+            @ApiResponse(responseCode = "404", description = "Canción no encontrada",
                     content = @Content)})
     @GetMapping("/song/{id}")
     public ResponseEntity<Song> mostrarCancion(@PathVariable Long id) {
@@ -98,7 +98,7 @@ public class SongController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Canción creada",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Song.class),
+                            schema = @Schema(implementation = GetSongDto.class),
                             examples = {@ExampleObject(
                                     value = """
                                                 {"id": 14, "title": "Levitating", "artist": "Dua Lipa", "album": "Future Nostalgia", "year": "2020"}
@@ -124,7 +124,7 @@ public class SongController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Canción modificada correctamente",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Song.class),
+                            schema = @Schema(implementation = GetSongDto.class),
                             examples = {@ExampleObject(
                                     value = """
                                                 {"id": 14, "title": "Cold Heart", "artist": "Dua Lipa", "album": "The Lockdown Sessions", "year": "2021"}

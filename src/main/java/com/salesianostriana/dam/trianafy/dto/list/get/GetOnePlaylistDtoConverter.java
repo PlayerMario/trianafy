@@ -24,4 +24,5 @@ public class GetOnePlaylistDtoConverter {
                 .songs(p.getSongs().stream().map(getSongDto::songToDto).collect(Collectors.toList()))
                 .build();
     }
+    
 }
