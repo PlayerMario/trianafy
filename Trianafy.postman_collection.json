@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "62ce748c-c063-4c02-b812-61628aa3ef0c",
+		"_postman_id": "57860f98-861e-4601-a59f-3e4ce2433203",
 		"name": "Trianafy",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "23783353"
@@ -87,13 +87,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/artist/13",
+							"raw": "{{BASE_URL}}/artist/3",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"artist",
-								"13"
+								"3"
 							]
 						}
 					},
@@ -146,13 +146,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/song/8",
+							"raw": "{{BASE_URL}}/song/7",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"song",
-								"8"
+								"7"
 							]
 						}
 					},
@@ -165,7 +165,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"title\": \"The song\",\r\n    \"artistId\": 2,\r\n    \"album\" : \"The album\",\r\n    \"year\": \"2000\"\r\n}",
+							"raw": "{\r\n    \"title\": \"The song\",\r\n    \"artistId\": 3,\r\n    \"album\" : \"The album\",\r\n    \"year\": \"2000\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -192,7 +192,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"title\": \"The song\",\r\n    \"artistId\": 3,\r\n    \"album\" : \"The album\",\r\n    \"year\": \"2000\"\r\n}",
+							"raw": "{\r\n    \"title\": \"The new song\",\r\n    \"artistId\": 3,\r\n    \"album\" : \"The new album\",\r\n    \"year\": \"2001\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -200,13 +200,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/song/8",
+							"raw": "{{BASE_URL}}/song/7",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"song",
-								"8"
+								"7"
 							]
 						}
 					},
@@ -316,13 +316,13 @@
 									}
 								},
 								"url": {
-									"raw": "{{BASE_URL}}/list/13",
+									"raw": "{{BASE_URL}}/list/12",
 									"host": [
 										"{{BASE_URL}}"
 									],
 									"path": [
 										"list",
-										"13"
+										"12"
 									]
 								}
 							},
@@ -377,7 +377,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{BASE_URL}}/list/12/song/9",
+									"raw": "{{BASE_URL}}/list/12/song/8",
 									"host": [
 										"{{BASE_URL}}"
 									],
@@ -385,7 +385,7 @@
 										"list",
 										"12",
 										"song",
-										"9"
+										"8"
 									]
 								}
 							},
@@ -397,7 +397,7 @@
 								"method": "POST",
 								"header": [],
 								"url": {
-									"raw": "{{BASE_URL}}/list/12/song/4",
+									"raw": "{{BASE_URL}}/list/12/song/7",
 									"host": [
 										"{{BASE_URL}}"
 									],
@@ -405,7 +405,7 @@
 										"list",
 										"12",
 										"song",
-										"4"
+										"7"
 									]
 								}
 							},
