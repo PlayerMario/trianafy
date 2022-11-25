@@ -41,5 +41,14 @@ public class PlaylistService {
         repository.deleteById(id);
     }
 
+    public void borrarCancionesLista(Long idSong) {
+        findAll().forEach(playlist -> {
+            playlist.getSongs().forEach(song -> {
+                if (song.getId() == idSong) {
+                    playlist.getSongs().remove(song);
+                }
+            });
+        });
+    }
 
 }

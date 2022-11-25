@@ -7,6 +7,7 @@ import com.salesianostriana.dam.trianafy.dto.song.get.GetSongDtoConverter;
 import com.salesianostriana.dam.trianafy.model.Song;
 import com.salesianostriana.dam.trianafy.repos.SongRepository;
 import com.salesianostriana.dam.trianafy.service.ArtistService;
+import com.salesianostriana.dam.trianafy.service.PlaylistService;
 import com.salesianostriana.dam.trianafy.service.SongService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -34,6 +35,7 @@ public class SongController {
     private final CreateSongDtoConverter dtoConverter;
     private final GetSongDtoConverter getSongDto;
     private final ArtistService artistService;
+    private final PlaylistService playlistService;
 
     @Operation(summary = "Obtener el listado de canciones")
     @ApiResponses(value = {
@@ -166,6 +168,7 @@ public class SongController {
     @DeleteMapping("/song/{id}")
     public ResponseEntity<?> borrarCancion(@PathVariable Long id) {
         if (songRepository.existsById(id)) {
+            playlistService.borrarCancionesLista(id);
             songService.deleteById(id);
         }
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

@@ -12,6 +12,7 @@ import com.salesianostriana.dam.trianafy.model.Playlist;
 import com.salesianostriana.dam.trianafy.model.Song;
 import com.salesianostriana.dam.trianafy.repos.PlaylistRepository;
 import com.salesianostriana.dam.trianafy.service.PlaylistService;
+import com.salesianostriana.dam.trianafy.service.SongService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @RestController
@@ -34,7 +35,9 @@ public class PlaylistController {
     private final CreatePlaylistDtoConverter createPlaylistDtoConverter;
     private final UpdatePlaylistDtoConverter updatePlaylistDtoConverter;
     private final PlaylistRepository playlistRepository;
+    private final SongService songService;
 
+    // GESTIÓN DE PLAYLIST
     @GetMapping("/list/")
     public ResponseEntity<List<GetPlaylistDto>> listarPlaylists() {
         List<Playlist> listado = playlistService.findAll();
@@ -71,8 +74,6 @@ public class PlaylistController {
 
             return ResponseEntity.status(HttpStatus.CREATED).body(createPlaylistDto);
         }
-
-        //setear la lista de canciones a null o a una lista vacía
     }
 
     @PutMapping("/list/{id}")
@@ -95,6 +96,46 @@ public class PlaylistController {
     public ResponseEntity<?> borrarPlaylist(@PathVariable Long id) {
         if (playlistRepository.existsById(id)) {
             playlistService.deleteById(id);
+        }
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    // GESTIÓN DE CANCIONES DE UNA PLAYLIST
+    @GetMapping("/list/{id}/song/")
+    public ResponseEntity<GetOnePlaylistDto> listarCancionesPlaylist(@PathVariable Long id) {
+        if (playlistService.findById(id).isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } else {
+            return ResponseEntity.ok(getOnePlaylistDtoConverter.onePlaylistToDto(playlistService.findById(id).get()));
+        }
+    }
+
+    @GetMapping("/list/{id1}/song/{id2}/")
+    public ResponseEntity<Song> mostrarCancion(@PathVariable("id1") Long idList, @PathVariable("id2") Long idSong) {
+        if (playlistService.findById(idList).isEmpty() || songService.findById(idSong).isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } else {
+            return ResponseEntity.of(playlistService.findById(idList)
+                    .get().getSongs()
+                    .stream().filter(song -> song.getId().equals(idSong)).findFirst());
+        }
+    }
+
+    @PostMapping("/list/{id1}/song/{id2}")
+    public ResponseEntity<GetOnePlaylistDto> guardarCancionLista(@PathVariable("id1") Long idList, @PathVariable("id2") Long idSong) {
+        if (playlistService.findById(idList).isEmpty() || songService.findById(idSong).isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } else {
+            playlistService.findById(idList).get().getSongs().add(songService.findById(idSong).get());
+            return listarCancionesPlaylist(idList);
+        }
+    }
+
+    @DeleteMapping("/list/{id1}/song/{id2}")
+    public ResponseEntity<?> borrarCancionLista(@PathVariable("id1") Long idList, @PathVariable("id2") Long idSong) {
+        if (playlistRepository.existsById(idList)) {
+            playlistService.borrarCancionesLista(idSong);
+            playlistService.deleteById(idList);
         }
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
