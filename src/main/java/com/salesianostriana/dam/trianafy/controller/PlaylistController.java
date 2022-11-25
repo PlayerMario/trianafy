@@ -11,6 +11,7 @@ import com.salesianostriana.dam.trianafy.dto.list.update.UpdatePlaylistDtoConver
 import com.salesianostriana.dam.trianafy.model.Playlist;
 import com.salesianostriana.dam.trianafy.model.Song;
 import com.salesianostriana.dam.trianafy.repos.PlaylistRepository;
+import com.salesianostriana.dam.trianafy.repos.SongRepository;
 import com.salesianostriana.dam.trianafy.service.PlaylistService;
 import com.salesianostriana.dam.trianafy.service.SongService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -43,6 +44,7 @@ public class PlaylistController {
     private final UpdatePlaylistDtoConverter updatePlaylistDtoConverter;
     private final PlaylistRepository playlistRepository;
     private final SongService songService;
+    private final SongRepository songRepository;
 
     // GESTIÓN DE PLAYLIST
     @Operation(summary = "Obtener el listado de todas las playlists")
@@ -126,16 +128,15 @@ public class PlaylistController {
             @ApiResponse(responseCode = "400", description = "Cuerpo para la creación aportado inválido",
                     content = @Content)})
     @PostMapping("/list/")
-    public ResponseEntity<CreatePlaylistDto> crearPlaylist(@RequestBody CreatePlaylistDto createPlaylistDto) {
-        if (createPlaylistDto.getName() == null || createPlaylistDto.getName() == null) {
+    public ResponseEntity<CreatePlaylistDto> crearPlaylist(@RequestBody Playlist playlist) {
+        if (playlist.getName() == "" || playlist.getDescription() == "") {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         } else {
-            Playlist nuevaPlaylist = createPlaylistDtoConverter.createPlaylistDtoToPlaylist(createPlaylistDto);
             List<Song> listadoCanciones = new ArrayList<>();
-            nuevaPlaylist.setSongs(listadoCanciones);
-            playlistService.add(nuevaPlaylist);
+            playlist.setSongs(listadoCanciones);
+            playlistService.add(playlist);
 
-            return ResponseEntity.status(HttpStatus.CREATED).body(createPlaylistDto);
+            return ResponseEntity.status(HttpStatus.CREATED).body(createPlaylistDtoConverter.playlistToDto(playlist));
         }
     }
 
@@ -157,7 +158,7 @@ public class PlaylistController {
     })
     @PutMapping("/list/{id}")
     public ResponseEntity<GetPlaylistDto> actualizarPlaylist(@PathVariable Long id, @RequestBody UpdatePlaylistDto updatePlaylistDto) {
-        if (updatePlaylistDto.getName() == null) {
+        if (updatePlaylistDto.getName() == "") {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         } else {
             Playlist playlistEditada = updatePlaylistDtoConverter.updatePlaylistDtoToPlaylist(updatePlaylistDto);
@@ -189,6 +190,7 @@ public class PlaylistController {
         }
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
 
     // GESTIÓN DE CANCIONES DE UNA PLAYLIST
     @Operation(summary = "Obtener el listado de canciones de una playlist")
@@ -239,7 +241,7 @@ public class PlaylistController {
                     )}),
             @ApiResponse(responseCode = "404", description = "Canción o listado no encontrados",
                     content = @Content)})
-    @GetMapping("/list/{id1}/song/{id2}/")
+    @GetMapping("/list/{id1}/song/{id2}")
     public ResponseEntity<Song> mostrarCancion(@PathVariable("id1") Long idList, @PathVariable("id2") Long idSong) {
         if (playlistService.findById(idList).isEmpty() || songService.findById(idSong).isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -274,7 +276,7 @@ public class PlaylistController {
                     )}),
             @ApiResponse(
                     responseCode = "404",
-                    description = "No existe la playlist",
+                    description = "No existe la playlist o la canción",
                     content = @Content)})
     @PostMapping("/list/{id1}/song/{id2}")
     public ResponseEntity<GetOnePlaylistDto> guardarCancionLista(@PathVariable("id1") Long idList, @PathVariable("id2") Long idSong) {
@@ -282,6 +284,7 @@ public class PlaylistController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         } else {
             playlistService.findById(idList).get().getSongs().add(songService.findById(idSong).get());
+            playlistService.edit(playlistService.findById(idList).get());
             //return listarCancionesPlaylist(idList);
             return ResponseEntity.status(HttpStatus.CREATED).body(getOnePlaylistDtoConverter.onePlaylistToDto(playlistService.findById(idList).get()));
         }
@@ -297,13 +300,18 @@ public class PlaylistController {
                                                 {}
                                             """
                             )}
-                    )})})
+                    )}),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "No existe la playlist o la canción",
+                    content = @Content)})
     @DeleteMapping("/list/{id1}/song/{id2}")
     public ResponseEntity<?> borrarCancionLista(@PathVariable("id1") Long idList, @PathVariable("id2") Long idSong) {
-        if (playlistRepository.existsById(idList)) {
+        if (!playlistRepository.existsById(idList) || !songRepository.existsById(idSong)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         } else {
-            playlistService.borrarCancionesLista(idSong);
+            playlistService.borrarCancionesLista(songService.findById(idSong).get());
+            playlistService.edit(playlistService.findById(idList).get());
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
     }

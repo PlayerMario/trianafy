@@ -41,14 +41,16 @@ public class PlaylistService {
         repository.deleteById(id);
     }
 
-    public void borrarCancionesLista(Long idSong) {
-        findAll().forEach(playlist -> {
-            playlist.getSongs().forEach(song -> {
-                if (song.getId() == idSong) {
-                    playlist.getSongs().remove(song);
+    public void borrarCancionesLista(Song s) {
+        List<Playlist> listaPlaylist = findAll();
+        for (Playlist p : listaPlaylist) {
+            p.getSongs().remove(s);
+            for(Song song : p.getSongs()) {
+                if (song.getId() == s.getId()){
+                    p.getSongs().remove(song);
                 }
-            });
-        });
+            }
+        }
     }
 
 }
