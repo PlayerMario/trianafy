@@ -4,7 +4,6 @@ package com.salesianostriana.dam.trianafy.service;
 import com.salesianostriana.dam.trianafy.model.Playlist;
 import com.salesianostriana.dam.trianafy.model.Song;
 import com.salesianostriana.dam.trianafy.repos.PlaylistRepository;
-import com.salesianostriana.dam.trianafy.repos.SongRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -41,14 +40,11 @@ public class PlaylistService {
         repository.deleteById(id);
     }
 
-    public void borrarCancionesLista(Song s) {
+    public void borrarCancionListas(Song s) {
         List<Playlist> listaPlaylist = findAll();
         for (Playlist p : listaPlaylist) {
-            p.getSongs().remove(s);
-            for(Song song : p.getSongs()) {
-                if (song.getId() == s.getId()){
-                    p.getSongs().remove(song);
-                }
+            while (p.getSongs().contains(s)){
+                p.getSongs().remove(s);
             }
         }
     }

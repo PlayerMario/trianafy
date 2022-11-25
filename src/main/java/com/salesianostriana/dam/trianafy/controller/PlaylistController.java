@@ -29,7 +29,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @RestController
@@ -310,7 +309,7 @@ public class PlaylistController {
         if (!playlistRepository.existsById(idList) || !songRepository.existsById(idSong)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         } else {
-            playlistService.borrarCancionesLista(songService.findById(idSong).get());
+            playlistService.borrarCancionListas(songService.findById(idSong).get());
             playlistService.edit(playlistService.findById(idList).get());
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }

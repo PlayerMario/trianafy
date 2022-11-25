@@ -170,7 +170,7 @@ public class SongController {
     @DeleteMapping("/song/{id}")
     public ResponseEntity<?> borrarCancion(@PathVariable Long id) {
         if (songRepository.existsById(id)) {
-            playlistService.borrarCancionesLista(songService.findById(id).get());
+            playlistService.borrarCancionListas(songService.findById(id).get());
             songService.deleteById(id);
         }
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
