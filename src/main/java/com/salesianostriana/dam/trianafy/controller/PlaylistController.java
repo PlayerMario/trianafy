@@ -6,8 +6,6 @@ import com.salesianostriana.dam.trianafy.dto.list.get.GetOnePlaylistDto;
 import com.salesianostriana.dam.trianafy.dto.list.get.GetOnePlaylistDtoConverter;
 import com.salesianostriana.dam.trianafy.dto.list.get.GetPlaylistDto;
 import com.salesianostriana.dam.trianafy.dto.list.get.GetPlaylistDtoConverter;
-import com.salesianostriana.dam.trianafy.dto.list.update.UpdatePlaylistDto;
-import com.salesianostriana.dam.trianafy.dto.list.update.UpdatePlaylistDtoConverter;
 import com.salesianostriana.dam.trianafy.model.Playlist;
 import com.salesianostriana.dam.trianafy.model.Song;
 import com.salesianostriana.dam.trianafy.repos.PlaylistRepository;
@@ -40,7 +38,6 @@ public class PlaylistController {
     private final GetPlaylistDtoConverter getPlaylistDtoConverter;
     private final GetOnePlaylistDtoConverter getOnePlaylistDtoConverter;
     private final CreatePlaylistDtoConverter createPlaylistDtoConverter;
-    private final UpdatePlaylistDtoConverter updatePlaylistDtoConverter;
     private final PlaylistRepository playlistRepository;
     private final SongService songService;
     private final SongRepository songRepository;
@@ -156,17 +153,18 @@ public class PlaylistController {
                     content = @Content)
     })
     @PutMapping("/list/{id}")
-    public ResponseEntity<GetPlaylistDto> actualizarPlaylist(@PathVariable Long id, @RequestBody UpdatePlaylistDto updatePlaylistDto) {
-        if (updatePlaylistDto.getName() == "") {
+    public ResponseEntity<GetPlaylistDto> actualizarPlaylist(@PathVariable Long id, @RequestBody Playlist playlist) {
+        if (playlist.getName() == "" || playlist.getDescription() == "") {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         } else {
-            Playlist playlistEditada = updatePlaylistDtoConverter.updatePlaylistDtoToPlaylist(updatePlaylistDto);
+            CreatePlaylistDto playlistEditada = createPlaylistDtoConverter.playlistToDto(playlist);
             return ResponseEntity.of(
-                    playlistService.findById(id).map(playlist -> {
-                        playlist.setName(playlistEditada.getName());
-                        playlistService.edit(playlist);
+                    playlistService.findById(id).map(p -> {
+                        p.setName(playlistEditada.getName());
+                        p.setDescription(playlistEditada.getDescription());
+                        playlistService.edit(p);
 
-                        return getPlaylistDtoConverter.playlistToDto(playlist);
+                        return getPlaylistDtoConverter.playlistToDto(p);
                     }));
         }
     }

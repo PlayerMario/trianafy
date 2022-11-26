@@ -11,14 +11,14 @@ public class CreatePlaylistDtoConverter {
                 .builder()
                 .id(p.getId())
                 .name(p.getName())
-                .desciption(p.getDescription())
+                .description(p.getDescription())
                 .build();
     }
 
     public Playlist createPlaylistDtoToPlaylist(CreatePlaylistDto createPlaylistDto) {
         return new Playlist(
                 createPlaylistDto.getName(),
-                createPlaylistDto.getDesciption()
+                createPlaylistDto.getDescription()
         );
     }
 

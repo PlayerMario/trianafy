@@ -25,7 +25,7 @@ indicar el cuerpo que se envía en la petición para crear o modificar algún re
 ## Organización del proyecto:
 En la carpeta principal nos encontramos diferentes elementos a tener en cuenta:
 - **src**: Es la carpeta donde se aloja todo el código fuente utilizado en el desarrollo de la aplicación.
-- **Carpeta - historias-usuario**: En esta carpeta nos encontramos con imágenes del dashboard que se ha utilizado para la organización del proyecto. En este caso, el proyecto se
+- **historias-usuario**: En esta carpeta nos encontramos con imágenes del dashboard que se ha utilizado para la organización del proyecto. En este caso, el proyecto se
 organiza por tareas, y en cada tarea que tenga que ver con una petición, tendremos en sus detalles la historia de usuario a la que pertenece y los códigos de aceptación.
 - **Trianafy.postman_collection.json**: Es una colección de Postman, que podremos importar en dicho programa, y que nos permitirá acceder a los distintos endpoints de la API para
 probar todas sus funcionalidades.

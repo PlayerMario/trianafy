@@ -13,6 +13,6 @@ public class CreatePlaylistDto {
 
     private Long id;
     private String name;
-    private String desciption;
+    private String description;
 
 }

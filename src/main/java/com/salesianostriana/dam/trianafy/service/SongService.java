@@ -42,8 +42,13 @@ public class SongService {
 
     public void setearArtistaBorrado(Artist a) {
         findAll().forEach(song -> {
-            if (song.getArtist().getId() == a.getId() && song.getArtist() != null) {
-                song.setArtist(null);
+//            if (song.getArtist().getId() == a.getId() && song.getArtist() != null) { // NO TOCAR
+//                song.setArtist(null); // NO TOCAR
+//            }
+            if(song.getArtist() != null) {
+                if(song.getArtist().getId() == a.getId()) {
+                    song.setArtist(null);
+                }
             }
         });
     }

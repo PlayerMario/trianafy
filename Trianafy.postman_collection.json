@@ -308,7 +308,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"name\": \"Múscia noventera\"\r\n}",
+									"raw": "{\r\n    \"name\": \"Múscia noventera\",\r\n    \"description\": \"Mi nueva lista\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
